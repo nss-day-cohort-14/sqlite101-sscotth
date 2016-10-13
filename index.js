@@ -6,7 +6,7 @@ const Table = require('cli-table')
 const db = new Database('db/Chinook_Sqlite.sqlite')
 
 db.serialize(() => {
-  // 1. Provide a query showing Customers (just their full names, customer ID and country) who are not in the US.
+
   db.all(`
     SELECT FirstName || " " || LastName AS "Name",
            CustomerId,
@@ -14,10 +14,9 @@ db.serialize(() => {
     FROM   Customer
     WHERE  Country IS NOT "USA"
   `, (err, customers) => {
+    console.log('1. Provide a query showing Customers (just their full names, customer ID and country) who are not in the US.')
     console.log(customers)
   })
-
-  // 2. Provide a query only showing the Customers from Brazil.
 
   // db.all(`
   //   SELECT FirstName || ' ' || LastName AS 'Name',
@@ -38,10 +37,9 @@ db.serialize(() => {
     FROM   Customer
     WHERE  Country IS "Brazil"
   `, (err, { CustomerId, Name, Country }) => {
+    console.log('2. Provide a query only showing the Customers from Brazil.') // TODO: fix
     console.log(`${CustomerId}: ${Name} (${Country})`)
   })
-
-  // 3. Provide a query showing the Invoices of customers who are from Brazil. The resultant table should show the customer's full name, Invoice ID, Date of the invoice and billing country.
 
   // db.all(`
   //   SELECT FirstName || " " || LastName AS "Name",
@@ -77,12 +75,14 @@ db.serialize(() => {
       (err, i) => {
         tbl.push([i.InvoiceId, i.Name, i.InvoiceDate, i.BillingCountry])
       },
-      () => console.log(tbl.toString())
+      () => {
+        console.log(`3. Provide a query showing the Invoices of customers who are from Brazil. The resultant table should show the customer's full name, Invoice ID, Date of the invoice and billing country.`)
+        console.log(tbl.toString())
+      }
     )
   }
 
   {
-    // 4. Provide a query showing only the Employees who are Sales Agents.
     const head = ['Name']
     const tbl = new Table({ head, style: { compact: true } })
 
